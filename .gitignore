@@ -1,0 +1,4 @@
+summary*.json
+summary*.csv
+.env
+.envrc
