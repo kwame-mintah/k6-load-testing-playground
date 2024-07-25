@@ -2,6 +2,8 @@ import http from "k6/http";
 import { check, group } from "k6";
 import { tagWithCurrentStageProfile } from "https://jslib.k6.io/k6-utils/1.3.0/index.js";
 
+const endpoint_path = "demo";
+
 // Options define test-run behavior. Most options can be passed in multiple places.
 // If an option is defined in multiple places, k6 chooses the value from the highest order of precedence.
 // https://grafana.com/docs/k6/latest/using-k6/k6-options/reference/
@@ -43,6 +45,19 @@ export default function () {
       "check HTTP status was 200 OK": (res) => res.status === 200,
       "verify root page has message": (res) =>
         res.body.includes("What a wonderful kind of day."),
+    });
+  });
+
+  group("post new data", function () {
+    const body = {
+      messageId: 1,
+      example: {
+        placeholder: "K6 Load Testing",
+      },
+    };
+    const response = http.post(`http://${__ENV.MY_HOSTNAME}/${endpoint_path}`, JSON.stringify(body), {headers: { 'Content-Type': 'application/json' }});
+    check(response, {
+      "check HTTP status was 200 OK": (res) => res.status === 200,
     });
   });
 }

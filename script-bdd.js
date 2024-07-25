@@ -5,6 +5,8 @@ import {
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.3/index.js";
 
+const endpoint_path = "demo";
+
 // Options define test-run behavior. Most options can be passed in multiple places.
 // If an option is defined in multiple places, k6 chooses the value from the highest order of precedence.
 // https://grafana.com/docs/k6/latest/using-k6/k6-options/reference/
@@ -51,6 +53,22 @@ export default function () {
     expect(response.json().message, "welcome message").to.equal(
       "What a wonderful kind of day."
     );
+  });
+
+  describe("post test data", () => {
+
+    const body = {
+      messageId: 1,
+      example: {
+        placeholder: "K6 Load Testing",
+      },
+    };
+
+    const response = http.post(`http://${__ENV.MY_HOSTNAME}/${endpoint_path}`, JSON.stringify(body), {headers: { 'Content-Type': 'application/json' }});
+
+    expect(response.status, "response status").to.equal(200);
+    expect(response).to.have.validJsonBody();
+    expect(response.json().length, "number of records").to.be.above(1)
   });
 }
 
