@@ -23,7 +23,7 @@ so I can easily load environment variables from the file.
 1. Run any of the JavaScript (.js) files using the following command e.g.:
 
    ```shell
-   k6 run bdd-script.js
+   k6 run script.js
    ```
 
 2. Review output file located in root directory e.g. `summary*.(csv/json)`
